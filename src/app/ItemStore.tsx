@@ -1,7 +1,40 @@
 import { create } from "zustand";
+import { List } from "./types/ListType";
+import { arrayMove } from "@dnd-kit/sortable";
+import { DragEndEvent } from "@dnd-kit/core";
 
-export const useStore = create((set) => ({
+interface itemStore {
+  items: List[];
+  setItems: (event: DragEndEvent) => void;
+  addItem: (parentId: number | null) => void;
+  removeItem: (id: number) => void;
+  updateItem: (id: number, update: any) => void;
+}
+
+export const useStore = create<itemStore>()((set) => ({
   items: [],
+
+  setItems: (event) => {
+    const { active, over } = event;
+
+    // Jeśli `over` jest null lub przeciągany element nie zmienia miejsca, wyjdź
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    set((state) => {
+      const items = state.items;
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+
+      // Przestaw elementy w tablicy
+      const newArray = arrayMove(items, oldIndex, newIndex);
+
+      // Zwróć zaktualizowany stan
+      return { items: newArray };
+    });
+  },
+
   addItem: (parentId = null) =>
     set((state) => {
       const newItem = {
@@ -12,7 +45,7 @@ export const useStore = create((set) => ({
         parentId,
       };
 
-      const addRecursively = (items, parentId) => {
+      const addRecursively = (items: List[], parentId: number): any => {
         return items.map((item) => {
           if (item.id === parentId) {
             return {
@@ -35,7 +68,7 @@ export const useStore = create((set) => ({
     }),
   removeItem: (id) =>
     set((state) => {
-      const removeRecursively = (items, idToRemove) => {
+      const removeRecursively = (items: List[], idToRemove: number): any => {
         return items
           .filter((item) => item.id !== idToRemove)
           .map((item) => ({
@@ -48,7 +81,7 @@ export const useStore = create((set) => ({
     }),
   updateItem: (id, updates) =>
     set((state) => {
-      const updateRecursively = (items, idToUpdate) => {
+      const updateRecursively = (items: List[], idToUpdate: number): any => {
         return items.map((item) => {
           if (item.id === idToUpdate) {
             return {
