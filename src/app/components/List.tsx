@@ -3,35 +3,68 @@ import React from "react";
 import { useStore } from "../ItemStore";
 import ListItem from "./ListItem";
 
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  closestCorners,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
 const List = () => {
   const { items, addItem, setItems } = useStore();
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    setItems(event);
-  };
+  const handleDragEnd = (event: DragEndEvent) => setItems(event);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { delay: 0, distance: 0, tolerance: 0 },
+    }),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   return (
-    <div>
-      <h1>Rekursywna Lista</h1>
-      <button onClick={() => addItem(null)}>Dodaj element główny</button>
-      <ul className="pl-4 bg-slate-400">
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
+    <div className="h-screen bg-slate-400">
+      <div className="flex justify-center pt-8">
+        <button
+          className="bg-purple-700 p-2 rounded-md my-auto"
+          onClick={() => addItem(null)}
         >
-          <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            {items.map((item) => (
-              <ListItem key={item.id} item={item} />
-            ))}
-          </SortableContext>
-        </DndContext>
-      </ul>
+          Dodaj element główny
+        </button>
+      </div>
+
+      {items.length === 0 ? (
+        <div>pusta lista</div>
+      ) : (
+        <ul className="pl-4">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={items}
+              strategy={verticalListSortingStrategy}
+            >
+              {items.map((item) => (
+                <ListItem key={item.id} item={item} />
+              ))}
+            </SortableContext>
+          </DndContext>
+        </ul>
+      )}
     </div>
   );
 };

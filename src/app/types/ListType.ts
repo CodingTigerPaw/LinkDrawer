@@ -3,5 +3,5 @@ export type List = {
   name: string;
   url: string;
   children: List[];
-  parentId: number;
+  parentId: number | null;
 };

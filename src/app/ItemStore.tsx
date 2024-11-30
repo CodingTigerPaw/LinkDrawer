@@ -12,39 +12,39 @@ interface itemStore {
 }
 
 export const useStore = create<itemStore>()((set) => ({
-  items: [],
+  items: [
+    {
+      id: 12345,
+      name: "tezt",
+      url: "http://test.pl",
+      children: [],
+      parentId: null,
+    },
+  ],
 
-  setItems: (event) => {
-    const { active, over } = event;
+  setItems: ({ active, over }) => {
+    const findIdx = (arr: List[], e: any) =>
+      arr.findIndex((el: List) => el.id === e.id);
 
-    // Jeśli `over` jest null lub przeciągany element nie zmienia miejsca, wyjdź
-    if (!over || active.id === over.id) {
-      return;
+    if (over || active.id !== over.id) {
+      set((state) => {
+        const oldIndex = findIdx(state.items, active);
+        const newIndex = findIdx(state.items, over);
+
+        return { items: arrayMove(state.items, oldIndex, newIndex) };
+      });
     }
-
-    set((state) => {
-      const items = state.items;
-      const oldIndex = items.findIndex((item) => item.id === active.id);
-      const newIndex = items.findIndex((item) => item.id === over.id);
-
-      // Przestaw elementy w tablicy
-      const newArray = arrayMove(items, oldIndex, newIndex);
-
-      // Zwróć zaktualizowany stan
-      return { items: newArray };
-    });
   },
 
-  addItem: (parentId = null) =>
+  addItem: (parentId = null) => {
+    const newItem = {
+      id: Date.now(),
+      name: "",
+      url: "",
+      children: [],
+      parentId,
+    };
     set((state) => {
-      const newItem = {
-        id: Date.now(),
-        name: "",
-        url: "",
-        children: [],
-        parentId,
-      };
-
       const addRecursively = (items: List[], parentId: number): any => {
         return items.map((item) => {
           if (item.id === parentId) {
@@ -65,7 +65,9 @@ export const useStore = create<itemStore>()((set) => ({
       } else {
         return { items: addRecursively(state.items, parentId) };
       }
-    }),
+    });
+  },
+
   removeItem: (id) =>
     set((state) => {
       const removeRecursively = (items: List[], idToRemove: number): any => {
