@@ -3,6 +3,7 @@ import { List } from "./types/ListType";
 import { arrayMove } from "@dnd-kit/sortable";
 import { DragEndEvent } from "@dnd-kit/core";
 import { v4 as uuid } from "uuid";
+import { Over } from "@dnd-kit/core";
 
 interface itemStore {
   items: List[];
@@ -36,11 +37,12 @@ export const useStore = create<itemStore>()((set) => ({
         children: updateRecursively(item.children, activeId, overId),
       }));
     };
-
-    if (over || active.id !== over.id) {
-      set((state) => ({
-        items: updateRecursively(state.items, active.id, over.id),
-      }));
+    if (over !== null) {
+      if (over || active.id !== over.id) {
+        set((state) => ({
+          items: updateRecursively(state.items, active.id, over.id),
+        }));
+      }
     }
   },
 

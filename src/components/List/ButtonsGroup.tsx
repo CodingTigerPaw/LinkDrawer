@@ -1,10 +1,10 @@
 import React from "react";
-import List from "../../app/types/ListType";
 import { useStore } from "../../app/ItemStore";
+import { List } from "../../app/types/ListType";
 import ToastNotifications from "../ToastNotification/ToastNotifications";
 import { toast } from "react-toastify";
 
-const ButtonsGroup = ({ item }) => {
+const ButtonsGroup = ({ item }: { item: List }) => {
   const { addItem, updateItem, removeItem } = useStore();
   return (
     <div className=" inline-flex border text-black border-slate-300 rounded-md ml-auto">
