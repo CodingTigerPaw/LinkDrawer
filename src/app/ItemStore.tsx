@@ -12,17 +12,7 @@ interface itemStore {
 }
 
 export const useStore = create<itemStore>()((set) => ({
-  items: [
-    {
-      id: 12345,
-      name: "tezt",
-      url: "http://test.pl",
-      isVisible: true,
-      isEdited: true,
-      children: [],
-      parentId: null,
-    },
-  ],
+  items: [],
 
   setItems: ({ active, over }) => {
     const findIdx = (arr: List[], e: any) =>

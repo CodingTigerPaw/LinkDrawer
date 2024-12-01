@@ -2,6 +2,7 @@
 import React from "react";
 import { useStore } from "../../app/ItemStore";
 import ListItem from "./ListItem";
+import Button from "../Button/Button";
 
 import {
   DndContext,
@@ -17,6 +18,7 @@ import {
   verticalListSortingStrategy,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
+import EmptyList from "./EmptyList";
 
 const List = () => {
   const { items, addItem, setItems } = useStore();
@@ -36,16 +38,13 @@ const List = () => {
   return (
     <div className="min-h-screen bg-slate-400">
       <div className="flex justify-center pt-8">
-        <button
-          className="bg-purple-700 p-2 rounded-md my-auto"
-          onClick={() => addItem(null)}
-        >
-          Dodaj element główny
-        </button>
+        <Button primary className="my-auto" onClick={() => addItem(null)}>
+          Add main Element
+        </Button>
       </div>
 
       {items.length === 0 ? (
-        <div>pusta lista</div>
+        <EmptyList />
       ) : (
         <ul className="pl-4">
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>

@@ -2,5 +2,5 @@ import * as yup from "yup";
 
 export const schema = yup.object().shape({
   name: yup.string().required(),
-  url: yup.string().url().required("to pole jest wymagane"),
+  url: yup.string().url().required(),
 });

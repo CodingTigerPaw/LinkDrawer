@@ -21,43 +21,38 @@ export const ListItemContent = ({ item }: Content) => {
           </span>
         </div>
 
-        <div
-          id="buttons"
-          className=" inline-flex border text-black border-black rounded-md ml-auto"
-        >
+        <div className=" inline-flex border text-black border-black rounded-md ml-auto">
           <button
-            className=""
+            className="ml-[10px]"
             onMouseDown={() => {
               updateItem(item.id, { isEdited: true });
             }}
-            style={{ marginLeft: "10px" }}
           >
-            Edytuj
+            Edit
           </button>
           <button
-            className=" "
+            className="ml-[10px] "
             onMouseDown={() => {
               addItem(item.id);
               updateItem(item.id, { isVisible: true });
             }}
-            style={{ marginLeft: "10px" }}
           >
-            Dodaj pod-element
+            Add
           </button>
           <button
+            className="ml-[10px] text-red-700"
             onMouseDown={() => removeItem(item.id)}
-            style={{ marginLeft: "10px", color: "red" }}
           >
-            Usuń
+            Remove
           </button>
           <button
+            className="mx-[10px] text-red-700"
             onMouseDown={() => {
               navigator.clipboard.writeText(item.url);
               toast.success("copied");
             }}
-            style={{ marginLeft: "10px", color: "red" }}
           >
-            copy
+            Copy
           </button>
 
           <ToastContainer
@@ -73,16 +68,17 @@ export const ListItemContent = ({ item }: Content) => {
             theme="light"
           />
         </div>
-        <MdKeyboardArrowDown
-          className={twMerge(
-            item.isVisible && "rotate-180",
-            "text-black text-4xl"
-          )}
-          onMouseDown={() => {
-            updateItem(item.id, { isVisible: !item.isVisible });
-            console.log(item);
-          }}
-        />
+        {item.children.length > 0 && (
+          <MdKeyboardArrowDown
+            className={twMerge(
+              item.isVisible && "rotate-180",
+              "text-black text-4xl"
+            )}
+            onMouseDown={() => {
+              updateItem(item.id, { isVisible: !item.isVisible });
+            }}
+          />
+        )}
       </div>
     </div>
   );

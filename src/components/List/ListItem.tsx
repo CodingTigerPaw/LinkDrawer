@@ -6,6 +6,7 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ListItemContent } from "./ListItemContent";
 import { twMerge } from "tailwind-merge";
+import Button from "../Button/Button";
 
 const ListItem = ({ item }: { item: List }) => {
   const { addItem } = useStore();
@@ -49,14 +50,15 @@ const ListItem = ({ item }: { item: List }) => {
           </SortableContext>
         </div>
       )}
-      <button
-        className="text-white bg-purple-600 p-1 rounded-md mt-2"
-        onMouseDown={() => {
+      <Button
+        primary
+        className="p-1 mt-2"
+        onClick={() => {
           addItem(item.id);
         }}
       >
-        Dodaj Element
-      </button>
+        Add Element
+      </Button>
     </li>
   );
 };
