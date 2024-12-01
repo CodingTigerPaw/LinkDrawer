@@ -52,6 +52,13 @@ const ListItem = ({ item }: { item: List }) => {
       )}
       <Button
         primary
+        className="p-1 mt-2 mr-2"
+        onClick={() => window.open(item.url, "_blank")}
+      >
+        Open Link
+      </Button>
+      <Button
+        primary
         className="p-1 mt-2"
         onClick={() => {
           addItem(item.id);

@@ -37,7 +37,7 @@ export const Form = ({ item }: formProps) => {
             type="text"
             name="name"
             value={values.name}
-            placeholder="Nazwa"
+            placeholder="Name"
             onChange={handleChange}
           />
           <div className="text-red-700 text-xs">

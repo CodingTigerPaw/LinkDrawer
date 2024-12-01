@@ -1,13 +1,13 @@
 import { useStore } from "../../app/ItemStore";
 import { Content } from "@/app/types/ContentType";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiDragMove2Fill } from "react-icons/ri";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+import ButtonsGroup from "./ButtonsGroup";
 
 export const ListItemContent = ({ item }: Content) => {
-  const { addItem, removeItem, updateItem } = useStore();
+  const { updateItem } = useStore();
   return (
     <div>
       <div className="flex">
@@ -20,54 +20,8 @@ export const ListItemContent = ({ item }: Content) => {
             <p>{item.url}</p>
           </span>
         </div>
+        <ButtonsGroup item={item} />
 
-        <div className=" inline-flex border text-black border-black rounded-md ml-auto">
-          <button
-            className="ml-[10px]"
-            onMouseDown={() => {
-              updateItem(item.id, { isEdited: true });
-            }}
-          >
-            Edit
-          </button>
-          <button
-            className="ml-[10px] "
-            onMouseDown={() => {
-              addItem(item.id);
-              updateItem(item.id, { isVisible: true });
-            }}
-          >
-            Add
-          </button>
-          <button
-            className="ml-[10px] text-red-700"
-            onMouseDown={() => removeItem(item.id)}
-          >
-            Remove
-          </button>
-          <button
-            className="mx-[10px] text-red-700"
-            onMouseDown={() => {
-              navigator.clipboard.writeText(item.url);
-              toast.success("copied");
-            }}
-          >
-            Copy
-          </button>
-
-          <ToastContainer
-            position="bottom-right"
-            autoClose={2000}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </div>
         {item.children.length > 0 && (
           <MdKeyboardArrowDown
             className={twMerge(

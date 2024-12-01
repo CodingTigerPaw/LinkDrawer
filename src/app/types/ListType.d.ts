@@ -1,9 +1,9 @@
 export type List = {
-  id: number;
+  id: string;
   name: string;
   url: string;
   isVisible: boolean;
   isEdited: boolean;
   children: List[];
-  parentId: number | null;
+  parentId: string | null;
 };
