@@ -1,16 +1,15 @@
 "use client";
 import { Dispatch } from "react";
-import { useStore } from "../ItemStore";
-import { List } from "../types/ListType";
+import { useStore } from "../../app/ItemStore";
+import { List } from "../../app/types/ListType";
 import { SetStateAction } from "react";
 import { useFormik } from "formik";
-import { schema } from "../schemas";
+import { schema } from "../../app/schemas";
 
 type formProps = {
   item: List;
-  setIsEditing: Dispatch<SetStateAction<boolean>>;
 };
-export const Form = ({ item, setIsEditing }: formProps) => {
+export const Form = ({ item }: formProps) => {
   const { updateItem, removeItem } = useStore();
 
   const { values, touched, errors, handleSubmit, handleChange } = useFormik({
@@ -19,8 +18,8 @@ export const Form = ({ item, setIsEditing }: formProps) => {
       url: item.url || "",
     },
     onSubmit: (values) => {
-      updateItem(item.id, values);
-      setIsEditing(false);
+      updateItem(item.id, { ...values, isEdited: false });
+      // setIsEditing(false);
     },
     validationSchema: schema,
   });

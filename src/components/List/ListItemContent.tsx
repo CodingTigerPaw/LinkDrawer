@@ -1,25 +1,13 @@
-import { useStore } from "../ItemStore";
-import { List } from "../types/ListType";
+import { useStore } from "../../app/ItemStore";
+import { Content } from "@/app/types/ContentType";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiDragMove2Fill } from "react-icons/ri";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-type Content = {
-  item: List;
-  setIsEditing: (arg: boolean) => void;
-  setIsVisible: (arg: boolean) => void;
-  isVisible: boolean;
-};
-
-export const ListItemContent = ({
-  item,
-  setIsEditing,
-  setIsVisible,
-  isVisible,
-}: Content) => {
-  const { addItem, removeItem } = useStore();
+export const ListItemContent = ({ item }: Content) => {
+  const { addItem, removeItem, updateItem } = useStore();
   return (
     <div>
       <div className="flex">
@@ -40,7 +28,7 @@ export const ListItemContent = ({
           <button
             className=""
             onMouseDown={() => {
-              setIsEditing(true);
+              updateItem(item.id, { isEdited: true });
             }}
             style={{ marginLeft: "10px" }}
           >
@@ -50,7 +38,7 @@ export const ListItemContent = ({
             className=" "
             onMouseDown={() => {
               addItem(item.id);
-              setIsVisible(true);
+              updateItem(item.id, { isVisible: true });
             }}
             style={{ marginLeft: "10px" }}
           >
@@ -86,8 +74,14 @@ export const ListItemContent = ({
           />
         </div>
         <MdKeyboardArrowDown
-          className={twMerge(isVisible && "rotate-180", "text-black text-4xl")}
-          onMouseDown={() => setIsVisible(!isVisible)}
+          className={twMerge(
+            item.isVisible && "rotate-180",
+            "text-black text-4xl"
+          )}
+          onMouseDown={() => {
+            updateItem(item.id, { isVisible: !item.isVisible });
+            console.log(item);
+          }}
         />
       </div>
     </div>

@@ -17,6 +17,8 @@ export const useStore = create<itemStore>()((set) => ({
       id: 12345,
       name: "tezt",
       url: "http://test.pl",
+      isVisible: true,
+      isEdited: true,
       children: [],
       parentId: null,
     },
@@ -26,13 +28,28 @@ export const useStore = create<itemStore>()((set) => ({
     const findIdx = (arr: List[], e: any) =>
       arr.findIndex((el: List) => el.id === e.id);
 
-    if (over || active.id !== over.id) {
-      set((state) => {
-        const oldIndex = findIdx(state.items, active);
-        const newIndex = findIdx(state.items, over);
+    const updateRecursively = (
+      items: List[],
+      activeId: any,
+      overId: number
+    ): List[] => {
+      const oldIndex = findIdx(items, { id: activeId });
+      const newIndex = findIdx(items, { id: overId });
 
-        return { items: arrayMove(state.items, oldIndex, newIndex) };
-      });
+      if (oldIndex !== -1 && newIndex !== -1) {
+        return arrayMove(items, oldIndex, newIndex);
+      }
+
+      return items.map((item) => ({
+        ...item,
+        children: updateRecursively(item.children, activeId, overId),
+      }));
+    };
+
+    if (over || active.id !== over.id) {
+      set((state) => ({
+        items: updateRecursively(state.items, active.id, over.id),
+      }));
     }
   },
 
@@ -41,11 +58,13 @@ export const useStore = create<itemStore>()((set) => ({
       id: Date.now(),
       name: "",
       url: "",
+      isVisible: true,
+      isEdited: true,
       children: [],
       parentId,
     };
     set((state) => {
-      const addRecursively = (items: List[], parentId: number): any => {
+      const addRecursively = (items: List[], parentId: number): List[] => {
         return items.map((item) => {
           if (item.id === parentId) {
             return {

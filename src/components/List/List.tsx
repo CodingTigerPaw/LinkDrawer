@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useStore } from "../ItemStore";
+import { useStore } from "../../app/ItemStore";
 import ListItem from "./ListItem";
 
 import {
@@ -9,7 +9,6 @@ import {
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
-  closestCorners,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -35,7 +34,7 @@ const List = () => {
   );
 
   return (
-    <div className="h-screen bg-slate-400">
+    <div className="min-h-screen bg-slate-400">
       <div className="flex justify-center pt-8">
         <button
           className="bg-purple-700 p-2 rounded-md my-auto"
@@ -49,11 +48,7 @@ const List = () => {
         <div>pusta lista</div>
       ) : (
         <ul className="pl-4">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCorners}
-            onDragEnd={handleDragEnd}
-          >
+          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
             <SortableContext
               items={items}
               strategy={verticalListSortingStrategy}
