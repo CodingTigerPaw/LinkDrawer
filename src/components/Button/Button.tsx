@@ -1,7 +1,6 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { ButtonType } from "$/app/types/ButttonType";
-
+import { ButtonType } from "@/app/types/ButttonType";
 const Button = ({
   primary,
   secondary,

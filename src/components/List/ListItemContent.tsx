@@ -1,5 +1,5 @@
 import { useStore } from "../../app/ItemStore";
-import { Content } from "$/app/types/ContentType";
+import { Content } from "@/app/types/ContentType";
 import "react-toastify/dist/ReactToastify.css";
 import { RiDragMove2Fill } from "react-icons/ri";
 import { MdKeyboardArrowDown } from "react-icons/md";
