@@ -11,8 +11,10 @@ import Button from "../Button";
 const ListItem = ({ item }: { item: List }) => {
   const { addItem } = useStore();
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: item.id, disabled: false });
+  const { listeners, setNodeRef, transform, transition } = useSortable({
+    id: item.id,
+    disabled: false,
+  });
 
   const style = {
     transition,
